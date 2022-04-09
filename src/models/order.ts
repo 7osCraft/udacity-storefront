@@ -65,8 +65,13 @@ export class OrderStore {
   async addProduct(
     quantity: number,
     orderId: number,
-    productId: string
-  ): Promise<Order> {
+    productId: number
+  ): Promise<{
+    id: number;
+    quantity: number;
+    order_id: number;
+    product_id: number;
+  }> {
     try {
       const order = await this.indexById(orderId);
 
@@ -91,7 +96,6 @@ export class OrderStore {
       const conn = await dbClient.connect();
 
       const result = await conn.query(sql, [quantity, orderId, productId]);
-
       const order = result.rows[0];
 
       conn.release();
