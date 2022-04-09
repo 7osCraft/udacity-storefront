@@ -1,15 +1,21 @@
-import express, { Request, Response } from 'express'
-import bodyParser from 'body-parser'
+import express, { Request, Response } from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
 
-const app: express.Application = express()
-const address: string = "0.0.0.0:3000"
+import usersRoutes from "./handlers/usersHandler";
 
-app.use(bodyParser.json())
+const app: express.Application = express();
+const address: string = "0.0.0.0:3000";
 
-app.get('/', function (req: Request, res: Response) {
-    res.send('Hello World!')
-})
+app.use(bodyParser.json());
+app.use(cors({ origin: "http://127.0.0.1:3000", optionsSuccessStatus: 200 }));
 
-app.listen(3000, function () {
-    console.log(`starting app on: ${address}`)
-})
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
+
+usersRoutes(app);
+
+app.listen(3000, () => {
+  console.log(`starting app on: ${address}`);
+});
