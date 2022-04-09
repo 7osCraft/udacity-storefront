@@ -10,7 +10,10 @@ const index = async (_: Request, res: Response) => {
 };
 
 const show = async (req: Request, res: Response) => {
-  const user = await store.show(req.body.id);
+  const user = await store.show(parseInt(req.params.id));
+  if (!user) {
+    return res.status(404).json({ error: "User not found." });
+  }
   return res.status(200).json(user);
 };
 
@@ -56,7 +59,6 @@ const routes = (app: express.Application) => {
   app.get("/users", index);
   app.get("/users/:id", show);
   app.post("/users", create);
-  //app.delete('/users', destroy)
   app.post("/users/authenticate", authenticate);
 };
 

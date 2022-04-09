@@ -1,4 +1,4 @@
-import Client from "../database";
+import dbClient from "../database";
 
 export type OrderStatus = "ACTIVE" | "COMPLETE";
 
