@@ -9,12 +9,30 @@ const index = async (_: Request, res: Response) => {
   return res.status(200).json(products);
 };
 
-const show = async (req: Request, res: Response) => {
-  const product = await store.show(parseInt(req.params.id));
-  if (!product) {
-    return res.status(404).json({ error: "Product not found." });
+const indexPopular = async (_: Request, res: Response) => {
+  const products = await store.popular();
+  return res.status(200).json(products);
+};
+
+const indexCategory = async (req: Request, res: Response) => {
+  try {
+    const products = await store.indexCategory(req.params.cat);
+    return res.status(200).json(products);
+  } catch (err) {
+    return res.status(400).json({ error: err });
   }
-  return res.status(200).json(product);
+};
+
+const show = async (req: Request, res: Response) => {
+  try {
+    const product = await store.show(parseInt(req.params.id));
+    if (!product) {
+      return res.status(404).json({ error: "Product not found." });
+    }
+    return res.status(200).json(product);
+  } catch (err) {
+    return res.status(400).json({ error: err });
+  }
 };
 
 const create = async (req: Request, res: Response) => {
@@ -61,6 +79,8 @@ const remove = async (req: Request, res: Response) => {
 
 const routes = (app: express.Application) => {
   app.get("/products", index);
+  app.get("/products/popular", indexPopular);
+  app.get("/products/category/:cat", indexCategory);
   app.get("/products/:id", show);
   app.put("/products", authTokenValidation, create);
   app.post("/products/:id", authTokenValidation, update);

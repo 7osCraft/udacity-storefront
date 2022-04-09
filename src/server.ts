@@ -4,6 +4,7 @@ import cors from "cors";
 
 import usersRoutes from "./handlers/usersHandler";
 import productsRoutes from "./handlers/productsHandler";
+import ordersRoutes from "./handlers/ordersHandler";
 
 const app: express.Application = express();
 const address: string = "0.0.0.0:3000";
@@ -17,6 +18,7 @@ app.get("/", (_: Request, res: Response) => {
 
 usersRoutes(app);
 productsRoutes(app);
+ordersRoutes(app);
 
 app.listen(3000, () => {
   console.log(`starting app on: ${address}`);

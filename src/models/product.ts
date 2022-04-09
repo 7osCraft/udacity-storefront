@@ -5,7 +5,7 @@ export type Product = {
   name: string;
   price: number;
   category: string;
-  timesOrdered?: number;
+  times_ordered?: number;
 };
 
 export class ProductStore {
@@ -14,6 +14,30 @@ export class ProductStore {
       const connection = await dbClient.connect();
       const sql = "SELECT * FROM products";
       const result = await connection.query(sql);
+      connection.release();
+      return result.rows as Product[];
+    } catch (error) {
+      throw new Error(`Could not get products: ${error}`);
+    }
+  }
+
+  async popular(): Promise<Product[]> {
+    try {
+      const connection = await dbClient.connect();
+      const sql = "SELECT * FROM products ORDER BY times_ordered DESC LIMIT 5";
+      const result = await connection.query(sql);
+      connection.release();
+      return result.rows as Product[];
+    } catch (error) {
+      throw new Error(`Could not get products: ${error}`);
+    }
+  }
+
+  async indexCategory(category: string): Promise<Product[]> {
+    try {
+      const connection = await dbClient.connect();
+      const sql = "SELECT * FROM products WHERE category = $1";
+      const result = await connection.query(sql, [category]);
       connection.release();
       return result.rows as Product[];
     } catch (error) {
@@ -62,7 +86,7 @@ export class ProductStore {
         product.name,
         product.price,
         product.category,
-        product.timesOrdered || 0,
+        product.times_ordered || 0,
         product.id,
       ]);
       connection.release();
