@@ -5,7 +5,7 @@ const pepper = process.env.PEPPER;
 const saltRounds = process.env.SALT_ROUNDS || "10";
 
 export type User = {
-  id: number;
+  id?: number;
   username: string;
   firstName: string;
   lastName: string;
@@ -22,7 +22,7 @@ export class UserStore {
 
       conn.release();
 
-      return result.rows;
+      return result.rows as User[];
     } catch (err) {
       throw new Error(`Unable to get users: ${err}`);
     }
@@ -37,7 +37,7 @@ export class UserStore {
 
       conn.release();
 
-      return result.rows[0];
+      return result.rows[0] as User;
     } catch (err) {
       throw new Error(`Unable to show user ${id}: ${err}`);
     }
@@ -50,13 +50,11 @@ export class UserStore {
         "INSERT INTO users (username, password) VALUES($1, $2) RETURNING *";
 
       const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds));
-
       const result = await conn.query(sql, [u.username, hash]);
-      const user = result.rows[0];
 
       conn.release();
 
-      return user;
+      return result.rows[0] as User;
     } catch (err) {
       throw new Error(`Unable to create user (${u.username}): ${err}`);
     }
@@ -68,10 +66,9 @@ export class UserStore {
       const sql = "DELETE FROM users WHERE id=($1)";
 
       const result = await conn.query(sql, [id]);
-      const user = result.rows[0];
       conn.release();
 
-      return user;
+      return result.rows[0] as User;
     } catch (err) {
       throw new Error(`Unable to delete user (${id}): ${err}`);
     }

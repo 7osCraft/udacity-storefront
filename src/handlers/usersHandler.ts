@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const store = new UserStore();
 
-const index = async (req: Request, res: Response) => {
+const index = async (_: Request, res: Response) => {
   const users = await store.index();
   return res.status(200).json(users);
 };
@@ -16,7 +16,6 @@ const show = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   const user: User = {
-    id: req.body.id,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     username: req.body.username,
@@ -55,7 +54,7 @@ const authenticate = async (req: Request, res: Response) => {
 
 const routes = (app: express.Application) => {
   app.get("/users", index);
-  app.get("/users/{:id}", show);
+  app.get("/users/:id", show);
   app.post("/users", create);
   //app.delete('/users', destroy)
   app.post("/users/authenticate", authenticate);
