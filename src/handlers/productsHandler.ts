@@ -31,6 +31,7 @@ const show = async (req: Request, res: Response) => {
     }
     return res.status(200).json(product);
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ error: err });
   }
 };

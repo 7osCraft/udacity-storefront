@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { User, UserStore } from "../models/user";
 import jwt from "jsonwebtoken";
+import { authTokenValidation } from "../middlewares";
 
 const store = new UserStore();
 
@@ -56,8 +57,8 @@ const authenticate = async (req: Request, res: Response) => {
 };
 
 const routes = (app: express.Application) => {
-  app.get("/users", index);
-  app.get("/users/:id", show);
+  app.get("/users", authTokenValidation, index);
+  app.get("/users/:id", authTokenValidation, show);
   app.post("/users", create);
   app.post("/users/authenticate", authenticate);
 };

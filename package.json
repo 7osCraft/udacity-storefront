@@ -4,10 +4,10 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "start": "node src/server.ts",
+    "start": "tsc && node src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "migrate": "db-migrate --env test up && db-migrate up",
-    "test": "set ENV=test&& db-migrate --env test up && tsc && jasmine-ts && db-migrate reset"
+    "test": "set ENV=test&& db-migrate --env test up && tsc && jasmine-ts && db-migrate --env test reset"
   },
   "author": "Udacity",
   "license": "ISC",
