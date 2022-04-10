@@ -16,11 +16,14 @@ SALT_ROUNDS={salt rounds, default is 10}
 TOKEN_SECRET={jwt token secret}
 ```
 
+You also need to setup a Postgres Database on port `5432` before running the server. You could also setup the databse using the provided `docker-compose.yml` file.
+
 To run the server locally (Default port is 3000):
 
 - Clone this repo
 - `yarn` to install all required dependencies
-- `yarn start` to start the local server
+- `yarn migrate` to create the required database tables
+- `yarn start` or `yarn watch` to start the local server
 
 Other scripts:
 
